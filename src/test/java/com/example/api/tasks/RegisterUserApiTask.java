@@ -38,6 +38,7 @@ public class RegisterUserApiTask implements Task {
                 Post.to("/register")
                         .with(request -> request
                                 .contentType(ContentType.JSON)
+                                .header("x-api-key", "reqres-free-v1")
                                 .body(body))
         );
     }
