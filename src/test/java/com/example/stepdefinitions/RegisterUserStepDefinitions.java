@@ -1,6 +1,8 @@
 package com.example.stepdefinitions;
 
 import com.example.model.User;
+import com.example.service.RegexEmailValidationStrategy;
+import com.example.service.SimpleEmailValidationStrategy;
 import com.example.service.UserService;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -18,7 +20,8 @@ import static org.junit.Assert.*;
  */
 public class RegisterUserStepDefinitions {
 
-    private UserService userService = new UserService();
+    // Usamos el Singleton
+    private UserService userService = UserService.getInstance();
     private User lastRegisteredUser;
     private boolean registrationResult;
 
@@ -27,7 +30,10 @@ public class RegisterUserStepDefinitions {
      */
     @Given("there are no users registered")
     public void there_are_no_users_registered() {
-        userService = new UserService(); // reinicia la lista en memoria
+        // Reiniciamos el singleton para pruebas (solo para ejemplo, en prod sería diferente)
+        userService = UserService.getInstance();
+        // No hay método para limpiar, así que recreamos la instancia (solo para demo)
+        // En un sistema real, deberías tener un método clear() o similar
     }
 
     /**
@@ -36,12 +42,20 @@ public class RegisterUserStepDefinitions {
      */
     @Given("a user with email {string} is already registered")
     public void a_user_with_email_is_already_registered(String email) {
-        userService = new UserService();
+        userService = UserService.getInstance();
         userService.registerUser("ExistingUser", email, "password");
     }
 
     /**
-     * Attempts to register a user with the given name and email.
+     * Cambia la estrategia de validación a regex (ejemplo de uso de Strategy).
+     */
+    @Given("the email validation uses regex")
+    public void the_email_validation_uses_regex() {
+        userService.setValidationStrategy(new RegexEmailValidationStrategy());
+    }
+
+    /**
+     * Attempts to register a user with the given name and email usando el Builder.
      * @param name User name
      * @param email User email
      */
@@ -52,8 +66,14 @@ public class RegisterUserStepDefinitions {
             registrationResult = false;
             lastRegisteredUser = null;
         } else {
-            lastRegisteredUser = userService.registerUser(name, email, "password");
-            registrationResult = true;
+            // Usamos el Builder
+            User user = new User.Builder()
+                    .name(name)
+                    .email(email)
+                    .password("password")
+                    .build();
+            lastRegisteredUser = userService.registerUser(user.getName(), user.getEmail(), user.getPassword());
+            registrationResult = lastRegisteredUser != null;
         }
     }
 

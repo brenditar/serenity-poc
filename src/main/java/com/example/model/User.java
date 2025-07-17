@@ -2,6 +2,8 @@ package com.example.model;
 
 /**
  * Represents a user in the system.
+ *
+ * Patrón Builder: Permite construir instancias de User de forma flexible y legible.
  */
 public class User {
     private Long id;
@@ -15,11 +17,7 @@ public class User {
     public User() {}
 
     /**
-     * Constructs a user with the given parameters.
-     * @param id User ID
-     * @param name User name
-     * @param email User email
-     * @param password User password
+     * Constructor completo.
      */
     public User(Long id, String name, String email, String password) {
         this.id = id;
@@ -27,6 +25,35 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    // --- Patrón Builder ---
+    public static class Builder {
+        private Long id;
+        private String name;
+        private String email;
+        private String password;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+        public User build() {
+            return new User(id, name, email, password);
+        }
+    }
+    // --- Fin Builder ---
 
     public Long getId() {
         return id;
