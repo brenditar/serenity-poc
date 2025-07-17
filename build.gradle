@@ -1,0 +1,60 @@
+plugins {
+    id("net.serenity-bdd.serenity-gradle-plugin") version "4.0.12"
+    id 'java'
+    id 'idea'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    serenityVersion = '4.0.12'
+    junitPlatformVersion = '1.10.2'
+    cucumberVersion = '7.14.0'  // compatible con Serenity 4.x
+}
+
+dependencies {
+    // Serenity core + Screenplay
+    implementation "net.serenity-bdd:serenity-core:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-junit:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-rest:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-rest-assured:$serenityVersion"
+
+// Cucumber + Serenity integration
+    testImplementation "net.serenity-bdd:serenity-cucumber:$serenityVersion"
+    testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
+    testImplementation "io.cucumber:cucumber-junit:$cucumberVersion"
+    testImplementation "io.cucumber:cucumber-core:$cucumberVersion"
+
+// Opcional para lambdas en StepDefinitions
+    testImplementation "io.cucumber:cucumber-java8:$cucumberVersion"
+
+// Utilidades de prueba
+    testImplementation "org.assertj:assertj-core:3.24.2"
+    testImplementation "org.hamcrest:hamcrest:2.2"
+    testImplementation "io.rest-assured:rest-assured:5.3.1"
+}
+
+
+test {
+    useJUnit()
+    systemProperty "environment", System.getProperty("environment")
+    testLogging.showStandardStreams = true
+}
+
+tasks.withType(Test).configureEach {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    useJUnit()
+    systemProperty "environment", System.getProperty("environment")
+    testLogging.showStandardStreams = true
+    reports {
+        html.required.set(true)
+    }
+}
