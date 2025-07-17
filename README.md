@@ -20,15 +20,35 @@ Este proyecto es una prueba de concepto (POC) para automatización de pruebas ut
 - JUnit
 - AssertJ, Hamcrest, Rest-Assured
 
-## Ejecución de pruebas
+## Uso del Makefile
 
-Para ejecutar las pruebas automatizadas:
+Para facilitar la ejecución de tareas comunes, este proyecto incluye un `Makefile` con los siguientes comandos:
+
+| Comando                        | Descripción                                                        |
+|--------------------------------|--------------------------------------------------------------------|
+| `make install`                 | Instala dependencias y compila el proyecto                         |
+| `make test`                    | Ejecuta todos los tests                                            |
+| `make clean`                   | Limpia archivos generados y reportes                               |
+| `make compile`                 | Solo compila el código fuente                                      |
+| `make test-feature FEATURE=...`| Ejecuta un feature específico (ejemplo: `register_users`)          |
+| `make report`                  | Abre el reporte HTML de Serenity                                   |
+| `make help`                    | Muestra ayuda y ejemplos de uso                                    |
+
+### Ejemplos de uso
 
 ```bash
-./gradlew clean test
-```
+# Instalar dependencias y compilar
+make install
 
-Los reportes de Serenity se generarán en `target/site/serenity/index.html`.
+# Ejecutar todos los tests
+enmake test
+
+# Ejecutar un feature específico
+make test-feature FEATURE=register_users
+
+# Abrir el reporte de Serenity
+enmake report
+```
 
 ## Ejemplo de escenario BDD
 
@@ -40,9 +60,3 @@ Feature: User Registration
     When she sends the required information for registration
     Then she should get a virtual account to log in whenever she needs
 ```
-
-## Requisitos previos
-
-- Java 11 o superior
-- Gradle (wrapper incluido)
-- (Opcional) IDE como IntelliJ IDEA o Eclipse 
