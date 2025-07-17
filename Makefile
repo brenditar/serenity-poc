@@ -1,6 +1,6 @@
 # Makefile para Serenity BDD + Gradle + Cucumber
 
-.PHONY: install test clean report compile test-feature help
+.PHONY: install test clean report compile test-feature test-api help
 
 # Instala dependencias y compila el proyecto
 install:
@@ -9,6 +9,10 @@ install:
 # Ejecuta todos los tests (modo headless por defecto)
 test:
 	./gradlew clean test
+
+# Ejecuta solo las pruebas de integración de API
+test-api:
+	./gradlew clean test --tests '*RegisterUserApiTestRunner'
 
 # Limpia los archivos generados por Gradle y reportes
 clean:
@@ -29,5 +33,6 @@ report:
 
 # Ayuda por defecto
 help:
-	@echo "Comandos disponibles: install, test, clean, compile, test-feature, report"
-	@echo "Ejemplo para ejecutar un feature: make test-feature FEATURE=register_users" 
+	@echo "Comandos disponibles: install, test, test-api, clean, compile, test-feature, report"
+	@echo "Ejemplo para ejecutar un feature: make test-feature FEATURE=register_users"
+	@echo "Ejecutar solo las pruebas de API: make test-api" 
