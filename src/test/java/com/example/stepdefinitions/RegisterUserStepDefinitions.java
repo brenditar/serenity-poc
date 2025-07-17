@@ -1,6 +1,7 @@
 package com.example.stepdefinitions;
 
 import com.example.model.User;
+import com.example.model.UserFactory;
 import com.example.service.RegexEmailValidationStrategy;
 import com.example.service.SimpleEmailValidationStrategy;
 import com.example.service.UserService;
@@ -30,10 +31,8 @@ public class RegisterUserStepDefinitions {
      */
     @Given("there are no users registered")
     public void there_are_no_users_registered() {
-        // Reiniciamos el singleton para pruebas (solo para ejemplo, en prod sería diferente)
         userService = UserService.getInstance();
         // No hay método para limpiar, así que recreamos la instancia (solo para demo)
-        // En un sistema real, deberías tener un método clear() o similar
     }
 
     /**
@@ -43,7 +42,9 @@ public class RegisterUserStepDefinitions {
     @Given("a user with email {string} is already registered")
     public void a_user_with_email_is_already_registered(String email) {
         userService = UserService.getInstance();
-        userService.registerUser("ExistingUser", email, "password");
+        // Usamos el Factory para crear el usuario
+        User user = UserFactory.createUserWithEmail(email);
+        userService.registerUser(user.getName(), user.getEmail(), user.getPassword());
     }
 
     /**
@@ -55,7 +56,7 @@ public class RegisterUserStepDefinitions {
     }
 
     /**
-     * Attempts to register a user with the given name and email usando el Builder.
+     * Attempts to register a user with the given name and email usando el Builder y el Factory.
      * @param name User name
      * @param email User email
      */
@@ -66,11 +67,14 @@ public class RegisterUserStepDefinitions {
             registrationResult = false;
             lastRegisteredUser = null;
         } else {
-            // Usamos el Builder
-            User user = new User.Builder()
+            // Usamos el Factory para crear el usuario
+            User user = UserFactory.createUserWithEmail(email);
+            // Si quieres usar el nombre del step, puedes modificar el factory o el builder aquí:
+            user = new User.Builder()
+                    .id(user.getId())
                     .name(name)
-                    .email(email)
-                    .password("password")
+                    .email(user.getEmail())
+                    .password(user.getPassword())
                     .build();
             lastRegisteredUser = userService.registerUser(user.getName(), user.getEmail(), user.getPassword());
             registrationResult = lastRegisteredUser != null;
