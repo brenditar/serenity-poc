@@ -1,10 +1,10 @@
-package com.example.stepdefinitions;
+package com.example.business.steps;
 
 import com.example.model.User;
 import com.example.model.UserFactory;
-import com.example.service.RegexEmailValidationStrategy;
-import com.example.service.SimpleEmailValidationStrategy;
-import com.example.service.UserService;
+import com.example.business.service.RegexEmailValidationStrategy;
+import com.example.business.service.SimpleEmailValidationStrategy;
+import com.example.business.service.UserService;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 /**
  * Step definitions for user registration scenarios.
  *
- * NOTA: Este archivo debe estar en la ruta src/test/java/com/example/stepdefinitions/RegisterUserStepDefinitions.java
+ * NOTA: Este archivo debe estar en la ruta src/test/java/com/example/business/steps/RegisterUserStepDefinitions.java
  * para que el package coincida correctamente.
  */
 public class RegisterUserStepDefinitions {

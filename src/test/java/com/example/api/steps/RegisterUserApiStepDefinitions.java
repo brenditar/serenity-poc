@@ -1,4 +1,4 @@
-package com.example.api.stepdefinitions;
+package com.example.api.steps;
 
 import com.example.api.questions.ErrorMessageQuestion;
 import com.example.api.questions.ResponseCodeQuestion;
