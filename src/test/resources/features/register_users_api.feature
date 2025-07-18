@@ -8,4 +8,5 @@ Feature: User Registration via API
   Scenario: Registration fails with missing password
     Given the API is available
     When I register a user with email "sydney@fife" and no password
-    Then the response code should be 400 
+    Then the response code should be 400
+    And the error message should be "Missing password" 

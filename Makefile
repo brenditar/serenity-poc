@@ -10,9 +10,9 @@ install:
 test:
 	./gradlew clean test
 
-# Ejecuta solo las pruebas de integración de API
+# Ejecuta todas las pruebas de integración de API (login y register)
 test-api:
-	./gradlew clean test --tests '*RegisterUserApiTestRunner'
+	./gradlew clean test --tests '*ApiTestRunner'
 
 # Limpia los archivos generados por Gradle y reportes
 clean:
@@ -35,4 +35,4 @@ report:
 help:
 	@echo "Comandos disponibles: install, test, test-api, clean, compile, test-feature, report"
 	@echo "Ejemplo para ejecutar un feature: make test-feature FEATURE=register_users"
-	@echo "Ejecutar solo las pruebas de API: make test-api" 
+	@echo "Ejecutar todas las pruebas de API (login y register): make test-api" 
