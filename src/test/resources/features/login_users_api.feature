@@ -1,10 +1,10 @@
 Feature: User Login via API
 
   Scenario Outline: Login with multiple users via API
-    Given the API is available
-    When I login with email "<email>" and password "<password>"
-    Then the response code should be <code>
-    And the error message should be "<error>"
+    Given the API for login is available
+    When I login with email "<email>" and password "<password>" via API
+    Then the login response code should be <code>
+    And the login error message should be "<error>"
 
     Examples:
       | email                | password   | code | error              |
