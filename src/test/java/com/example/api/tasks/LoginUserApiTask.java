@@ -34,6 +34,7 @@ public class LoginUserApiTask implements Task {
                 Post.to("/login")
                         .with(request -> request
                                 .contentType(ContentType.JSON)
+                                .header("x-api-key", "reqres-free-v1")
                                 .body(body))
         );
     }
