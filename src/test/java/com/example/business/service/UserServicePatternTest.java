@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.business.service;
 
 import com.example.model.User;
 import org.junit.Test;

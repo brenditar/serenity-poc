@@ -4,12 +4,19 @@ Este proyecto es una prueba de concepto (POC) para automatización de pruebas ut
 
 ## Estructura del proyecto
 
-- **src/main/java**: Código fuente principal (actualmente contiene un ejemplo básico).
+- **src/main/java**: Código fuente principal (modelos, servicios, factories, etc.).
 - **src/test/java**: Código de pruebas automatizadas, organizado en:
-  - `stepdefinitions`: Definiciones de pasos de Cucumber.
-  - `runners`: Clases para ejecutar los tests.
-  - `interactions`, `tasks`, `questions`, `models`: Patrones Screenplay para organizar la lógica de pruebas.
-- **src/test/resources/features**: Archivos `.feature` escritos en Gherkin para describir los escenarios de prueba.
+  - `com.example.api.steps`: Step definitions para pruebas de API (Screenplay, integración real).
+  - `com.example.business.steps`: Step definitions para lógica de negocio simulada (patrones, lógica interna).
+  - `com.example.api.tasks`, `com.example.api.questions`: Tareas y preguntas Screenplay para pruebas de API.
+  - `com.example.api.runners`, `com.example.business.runners`: Clases para ejecutar los tests (cada runner apunta al glue correspondiente).
+- **src/test/resources/features/api**: Features de pruebas de API.
+- **src/test/resources/features/business**: Features de lógica de negocio simulada.
+
+## Uso de las carpetas `model` y `business/service`
+
+- **model**: Contiene las entidades de dominio (por ejemplo, `User`, `UserFactory`). Es **compartida** entre los tests de API y de lógica interna, ya que ambos contextos pueden necesitar construir o validar datos de usuario.
+- **business/service**: Contiene la lógica de negocio simulada (por ejemplo, `UserService`, estrategias de validación). Se utiliza principalmente en el dominio de lógica interna (business), para simular reglas de negocio y aplicar patrones de diseño. No suele usarse directamente en las pruebas de integración de API.
 
 ## Tecnologías utilizadas
 
@@ -20,19 +27,20 @@ Este proyecto es una prueba de concepto (POC) para automatización de pruebas ut
 - JUnit
 - AssertJ, Hamcrest, Rest-Assured
 
-## Uso del Makefile
+## Ejecución de pruebas
 
 Para facilitar la ejecución de tareas comunes, este proyecto incluye un `Makefile` con los siguientes comandos:
 
-| Comando                        | Descripción                                                        |
-|--------------------------------|--------------------------------------------------------------------|
-| `make install`                 | Instala dependencias y compila el proyecto                         |
-| `make test`                    | Ejecuta todos los tests                                            |
-| `make clean`                   | Limpia archivos generados y reportes                               |
-| `make compile`                 | Solo compila el código fuente                                      |
-| `make test-feature FEATURE=...`| Ejecuta un feature específico (ejemplo: `register_users`)          |
-| `make report`                  | Abre el reporte HTML de Serenity                                   |
-| `make help`                    | Muestra ayuda y ejemplos de uso                                    |
+| Comando                       | Descripción                                              |
+| ----------------------------- | -------------------------------------------------------- |
+| make install                  | Instala dependencias y compila el proyecto               |
+| make test                     | Ejecuta todos los tests                                  |
+| make test-api                 | Ejecuta todas las pruebas de API (login y register)      |
+| make clean                    | Limpia archivos generados y reportes                     |
+| make compile                  | Solo compila el código fuente                            |
+| make test-feature FEATURE=... | Ejecuta un feature específico (ejemplo: api/register_users_api)  |
+| make report                   | Abre el reporte HTML de Serenity                         |
+| make help                     | Muestra ayuda y ejemplos de uso                          |
 
 ### Ejemplos de uso
 
@@ -41,22 +49,43 @@ Para facilitar la ejecución de tareas comunes, este proyecto incluye un `Makefi
 make install
 
 # Ejecutar todos los tests
-enmake test
+make test
+
+# Ejecutar solo las pruebas de API (login y register)
+make test-api
 
 # Ejecutar un feature específico
-make test-feature FEATURE=register_users
+make test-feature FEATURE=api/register_users_api
 
 # Abrir el reporte de Serenity
-enmake report
+make report
 ```
+
+## Organización de step definitions y runners
+
+- **API:**
+  - Step definitions: `com.example.api.steps`
+  - Runner: `com.example.api.runners.ApiTestRunner`
+  - Features: `src/test/resources/features/api/`
+- **Lógica de negocio simulada:**
+  - Step definitions: `com.example.business.steps`
+  - Runner: `com.example.business.runners.RegisterUserTestRunner`
+  - Features: `src/test/resources/features/business/`
 
 ## Ejemplo de escenario BDD
 
 ```gherkin
-Feature: User Registration
+Feature: User Registration via API
 
-  Scenario: Successful user registration
-    Given Brenda is a client who wants to manage her banking products
-    When she sends the required information for registration
-    Then she should get a virtual account to log in whenever she needs
+  Scenario: Successful user registration via API
+    Given the API for registration is available
+    When I register a user with email "eve.holt@reqres.in" and password "pistol" via API
+    Then the registration response code should be 200
 ```
+
+## Requisitos previos
+
+- Java 11 o superior
+- Gradle (wrapper incluido)
+- (Opcional) IDE como IntelliJ IDEA o Eclipse
+- (Opcional) GNU Make
